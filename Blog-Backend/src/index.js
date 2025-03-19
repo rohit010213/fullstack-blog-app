@@ -15,10 +15,23 @@ const PORT = process.env.PORT || 8000; // Use Render's dynamic PORT
 const __dirname = path.resolve();
 
 // CORS setup for both local & production
+// app.use(cors({
+//     origin : "http://localhost:5173",
+//     credentials : true,
+// }))
+
+
 app.use(cors({
-    origin : "http://localhost:5173",
-    credentials : true,
-}))
+    origin: (origin, callback) => {
+        if (!origin || origin.includes("render.com") || origin.includes("localhost")) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
+
 
 // Middleware
 app.use(express.json({ limit: "16kb" }));
