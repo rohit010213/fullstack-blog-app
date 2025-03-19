@@ -1,0 +1,13 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build" : "npm install --prefix Blog-Backend && npm install --prefix Blog-frontend && npm run build --prefix Blog-frontend",
+    "start" : "npm run start --prefix Blog-Backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
