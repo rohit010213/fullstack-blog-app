@@ -33,22 +33,19 @@ const registerUser = async (req, res, next) => {
             throw new ApiError(409, "User already exists");
         }
 
-        const avatarLocalPath = req.files?.avatar?.[0]?.path; 
-        console.log("Avatar Local Path:", avatarLocalPath);
-
-        if (!avatarLocalPath) {
+        if (!req.file || !req.file.buffer) {
             throw new ApiError(400, "Avatar file is required");
         }
 
-        const avatar = await uploadOnCloudinary(avatarLocalPath);
-        console.log("Cloudinary Upload Response:", avatar);
+        // Upload buffer to Cloudinary (PASS BUFFER INSTEAD OF PATH)
+        const avatarUrl = await uploadOnCloudinary(req.file.buffer, req.file.originalname);
+        console.log("Cloudinary Upload Response:", avatarUrl);
 
-        if (!avatar) {
+        if (!avatarUrl) {
             throw new ApiError(500, "Failed to upload avatar");
         }
 
-      
-        const user = await User.create({ username, email, password, avatar });
+        const user = await User.create({ username, email, password, avatar: avatarUrl });
 
         const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
@@ -57,6 +54,8 @@ const registerUser = async (req, res, next) => {
         next(error);
     }
 };
+
+
 
 
 const loginUser = async (req, res, next) => {

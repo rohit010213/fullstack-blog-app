@@ -12,13 +12,29 @@ const Register = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith("image/")) {
+            setProfileImage(file);
+        } else {
+            toast.error("Only image files are allowed!");
+            setProfileImage(null);
+        }
+    };
+
     const handleSignUp = async (e) => {
         e.preventDefault();
+        
+        if (!username || !email || !password || !profileImage) {
+            toast.error("All fields including profile image are required!");
+            return;
+        }
+
         const formData = new FormData();
         formData.append('username', username);
         formData.append('email', email);
         formData.append('password', password);
-        if (profileImage) formData.append('avatar', profileImage);
+        formData.append('avatar', profileImage);
 
         try {
             const response = await axiosInstance.post('/users/register', formData, {
@@ -28,16 +44,15 @@ const Register = () => {
             });
 
             if (response.status === 201) {
-            
-                toast.success("Register Successfully")
+                toast.success("Registered Successfully!");
                 navigate('/login');
             } else {
                 setError(response.data.message || 'An error occurred.');
             }
         } catch (error) {
-            toast.error("Please add all the field");
+            console.error("Registration Error:", error);
             setError(error.response?.data?.message || 'An error occurred. Please try again.');
-       
+            toast.error(error.response?.data?.message || "Something went wrong!");
         }
     };
 
@@ -73,9 +88,15 @@ const Register = () => {
                 <input
                     type="file"
                     id="profileImage"
-                    name="avatar" // Ensure this matches the backend field name
-                    onChange={(e) => setProfileImage(e.target.files[0])}
+                    name="avatar"
+                    onChange={handleFileChange}
+                    required
                 />
+                {profileImage && (
+                    <div className="image-preview">
+                        <img src={URL.createObjectURL(profileImage)} alt="Preview" width="100" height="100" />
+                    </div>
+                )}
                 {error && <div className="error">{error}</div>}
                 <button type="submit">Register</button>
                 <div className="link-container">

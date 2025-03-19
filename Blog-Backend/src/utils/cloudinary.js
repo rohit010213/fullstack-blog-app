@@ -1,27 +1,35 @@
 import { v2 as cloudinary } from "cloudinary";
-import fs from "fs";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-// Configure Cloudinary
+// Cloudinary Configuration
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Upload image to Cloudinary and delete local file
-export const uploadOnCloudinary = async (filePath) => {
-    try {
-        const result = await cloudinary.uploader.upload(filePath, { folder: "blogs" });
+/**
+ * Upload image buffer to Cloudinary
+ * @param {Buffer} buffer - File buffer
+ * @param {string} fileName - Original file name for reference
+ * @returns {Promise<string>} - Cloudinary secure URL
+ */
+export const uploadOnCloudinary = (buffer, fileName) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: "blogs", resource_type: "image" },
+            (error, result) => {
+                if (error) {
+                    console.error("Cloudinary Upload Error:", error);
+                    reject(new Error("Cloudinary upload failed"));
+                } else {
+                    resolve(result.secure_url);
+                }
+            }
+        );
 
-        // Delete local file after upload
-        fs.unlinkSync(filePath);
-
-        return result.secure_url; // Return Cloudinary URL
-    } catch (error) {
-        console.error("Cloudinary Upload Error:", error);
-        return null;
-    }
+        uploadStream.end(buffer); // Send buffer data to Cloudinary
+    });
 };

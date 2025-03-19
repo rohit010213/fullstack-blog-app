@@ -1,9 +1,15 @@
+/* General Styles */
 .dashboard {
     font-family: Arial, sans-serif;
     padding: 20px;
     background-color: #f4f4f4;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Header Section */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
@@ -15,19 +21,14 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-}
-
 .user-image {
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    margin-left: auto;
     object-fit: cover;
 }
 
+/* Logout Button */
 .logout-button {
     padding: 10px 20px;
     background-color: #d9534f;
@@ -35,33 +36,39 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 .logout-button:hover {
     background-color: #c9302c;
 }
 
+/* Main Content */
 .dashboard-content {
-    margin-top: 20px;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 120px); /* Prevents overflow beyond screen */
 }
 
+/* Blog Form */
 .blog-form input,
 .blog-form textarea,
 .blog-form button {
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 16px;
 }
 
 .blog-form input[type="file"] {
-    padding: 0;
+    padding: 5px;
 }
 
 .blog-form button {
@@ -69,73 +76,228 @@
     color: white;
     border: none;
     cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease-in-out;
 }
 
 .blog-form button:hover {
     background-color: #31b0d5;
 }
 
-.message {
-    color: #d9534f;
-    font-weight: bold;
-}
-
+/* Scrollable Blog List */
 .blog-list {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.blog-list th, .blog-list td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.blog-list th {
-    background-color: #f4f4f4;
-}
-
-.blog-list tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.blog-image {
-    width: 100px;
-    height: auto;
-    border-radius: 5px;
-}
-
-.delete-confirmation {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
     margin-top: 20px;
-    padding: 15px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-height: 500px; /* Limits height */
+    overflow-y: auto; /* Enables scrolling */
+    padding-right: 10px; /* Avoids hidden content */
 }
 
-.delete-confirmation button {
-    margin: 0 5px;
+/* Scrollbar Styling */
+.blog-list::-webkit-scrollbar, .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.blog-list::-webkit-scrollbar-track, .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.blog-list::-webkit-scrollbar-thumb, .modal-content::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 5px;
+}
+
+.blog-list::-webkit-scrollbar-thumb:hover, .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* Blog Card */
+.blog-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    padding: 15px;
+    max-width: 600px;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Blog Image */
+.blog-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Blog Content */
+.blog-content {
+    padding: 10px;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* ✅ Fixed Description Wrapping Issue */
+.blog-description {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+/* Blog Actions */
+.blog-actions {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.blog-actions button {
     padding: 8px 15px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-.delete-confirmation button:first-child {
-    background-color: #d9534f;
+/* Edit Button */
+.blog-actions .edit-btn {
+    background-color: #ffc107;
     color: white;
 }
 
-.delete-confirmation button:first-child:hover {
-    background-color: #c9302c;
+.blog-actions .edit-btn:hover {
+    background-color: #e0a800;
 }
 
-.delete-confirmation button:last-child {
-    background-color: #5bc0de;
+/* Delete Button */
+.blog-actions .delete-btn {
+    background-color: #dc3545;
     color: white;
 }
 
-.delete-confirmation button:last-child:hover {
-    background-color: #31b0d5;
+.blog-actions .delete-btn:hover {
+    background-color: #c82333;
+}
+
+/* Message */
+.message {
+    color: #d9534f;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Blog Image Preview */
+.blog-image-preview {
+    width: 250px;
+    height: 250px;
+    margin-top: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .blog-list {
+        grid-template-columns: 1fr;
+    }
+
+    .user-image {
+        padding: 10px;
+    }
+}
+
+/* Read More Button */
+.read-more {
+    background-color: transparent;
+    color: #007bff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Scrollable Modal */
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    max-height: 80vh; /* Ensures modal fits */
+    overflow-y: auto; /* Enables scrolling in modal */
+}
+
+/* Modal Heading */
+.modal-content h2 {
+    margin-bottom: 10px;
+}
+
+/* Modal Image */
+.modal-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* Close Button */
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: red;
+}
+
+/* ✅ Ensures Proper Wrapping in Modal */
+.modal-para {
+    line-height: 1.6;
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+    white-space: pre-wrap;
 }
