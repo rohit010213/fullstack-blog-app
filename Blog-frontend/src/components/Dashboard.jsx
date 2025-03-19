@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { axiosInstance } from "../lib/axios.js";
 import Cookies from 'js-cookie';
 import '../css/Dashboard.css';
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ const Dashboard = () => {
 
     const handleLogout = () => {
         Cookies.remove('accessToken');
+        toast.success("Logout Successfully");
         window.location.href = '/login';
     };
 
@@ -69,6 +71,7 @@ const Dashboard = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
+                toast.success("Blog updated successfully!");
                 setMessage("Blog updated successfully!");
             } else {
                 await axiosInstance.post("/blogs", formData, {
@@ -77,6 +80,7 @@ const Dashboard = () => {
                         "Content-Type": "multipart/form-data",
                     },
                 });
+                toast.success("Blog created successfully!");
                 setMessage("Blog created successfully!");
             }
     
@@ -100,10 +104,12 @@ const Dashboard = () => {
                     'Authorization': `Bearer ${Cookies.get('accessToken')}`
                 }
             });
+            toast.success("Blog deleted Successfully");
             fetchBlogs();
         } catch (error) {
             console.error('Error deleting blog:', error);
             setMessage('Failed to delete blog.');
+            toast.error("Failed to delete blog");
         }
     };
 

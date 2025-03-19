@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from "../lib/axios.js"; 
 import '../css/Register.css'; 
-
+import toast from "react-hot-toast";
 
 const Register = () => {
     const [username, setUsername] = useState('');
@@ -27,14 +27,17 @@ const Register = () => {
                 }
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
             
+                toast.success("Register Successfully")
                 navigate('/login');
             } else {
                 setError(response.data.message || 'An error occurred.');
             }
         } catch (error) {
+            toast.error("Please add all the field");
             setError(error.response?.data?.message || 'An error occurred. Please try again.');
+       
         }
     };
 
